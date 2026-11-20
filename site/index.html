@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Александр — плейблы</title>
+<meta name="description" content="Портфолио разработчика playable ads: Cocos Creator 3.x / TypeScript.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --text: #17181c;
+    --muted: #61646e;
+    --line: #e2e0d9;
+    --accent: #ff5a36;
+    --accent-ink: #ffffff;
+    --chip: #ecebe5;
+    --phone: #17181c;
+    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111216;
+      --surface: #1a1c21;
+      --text: #ecedf0;
+      --muted: #9a9daa;
+      --line: #2a2d34;
+      --accent: #ff6b4a;
+      --chip: #24262d;
+      --phone: #000000;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111216; --surface: #1a1c21; --text: #ecedf0; --muted: #9a9daa; --line: #2a2d34;
+    --accent: #ff6b4a; --chip: #24262d; --phone: #000000;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 Manrope, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+  header { padding: 56px 0 40px; }
+  .name { font-size: clamp(36px, 7vw, 56px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0; }
+  .role { font-size: clamp(18px, 3vw, 22px); color: var(--muted); margin: 10px 0 0; font-weight: 500; }
+  .contact {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 24px;
+    background: var(--accent); color: var(--accent-ink); text-decoration: none;
+    font-weight: 700; padding: 10px 18px; border-radius: 999px;
+  }
+  .contact:hover { filter: brightness(1.06); }
+  .contact svg { width: 18px; height: 18px; fill: currentColor; }
+
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 32px 0 8px; border-top: 1px solid var(--line); }
+  .about p { margin: 0 0 12px; max-width: 52ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; margin: 0; padding: 0; list-style: none; }
+  .chips li { background: var(--chip); border-radius: 999px; padding: 5px 12px; font-size: 14px; font-weight: 500; }
+
+  section { padding: 48px 0 8px; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .sec-head h2 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
+  .sec-head p { margin: 0; color: var(--muted); }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .card { display: flex; flex-direction: column; gap: 14px; }
+  .phone {
+    position: relative; aspect-ratio: 390 / 844; background: var(--phone);
+    border-radius: 22px; padding: 6px; box-shadow: var(--shadow);
+    cursor: pointer; border: 0; width: 100%; display: block;
+  }
+  .phone video { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; display: block; background: #000; }
+  .phone .full {
+    position: absolute; right: 14px; bottom: 14px; font: 600 12px/1 Manrope, sans-serif;
+    background: rgba(0,0,0,.6); color: #fff; padding: 7px 10px; border-radius: 999px;
+    opacity: 0; transition: opacity .2s;
+  }
+  .phone:hover .full, .phone:focus-visible .full { opacity: 1; }
+  .phone:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .badge {
+    position: absolute; left: 14px; top: 14px; font: 700 11px/1 Manrope, sans-serif; letter-spacing: .04em;
+    text-transform: uppercase; background: var(--accent); color: var(--accent-ink); padding: 6px 9px; border-radius: 999px;
+  }
+  .card h3 { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.3; }
+  .card .game { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .card p { margin: 0; font-size: 15px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { font-size: 12px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; }
+
+  footer { padding: 48px 0 56px; margin-top: 40px; border-top: 1px solid var(--line); color: var(--muted); }
+  footer a { color: var(--text); font-weight: 700; }
+
+  dialog {
+    border: 0; padding: 0; background: transparent; max-width: none; max-height: none;
+  }
+  dialog::backdrop { background: rgba(10,10,12,.82); }
+  .modal { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .modal video { height: min(84vh, 844px); max-width: 92vw; border-radius: 18px; background: #000; display: block; }
+  .modal .bar { display: flex; gap: 16px; align-items: center; color: #fff; font-weight: 600; }
+  .modal button { font: inherit; background: #fff; color: #111; border: 0; border-radius: 999px; padding: 8px 16px; cursor: pointer; font-weight: 700; }
+
+  @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 720px) {
+    header { padding: 36px 0 28px; }
+    .about { grid-template-columns: 1fr; gap: 20px; }
+  }
+  @media (max-width: 420px) { .grid { gap: 16px; } .card p { font-size: 14px; } }
+  @media (prefers-reduced-motion: reduce) { .phone .full { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1 class="name">Александр</h1>
+  <p class="role">Разработчик плейблов · Cocos Creator 3.x / TypeScript</p>
+  <a class="contact" href="https://t.me/agazipov" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.7 19.5c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.2-8.3c.4-.4-.1-.6-.6-.2L6.1 13.2 1.2 11.7c-1-.3-1-1 .2-1.5L20.6 2.8c.9-.3 1.6.2 1.3 1.5z"/></svg>
+    @agazipov
+  </a>
+</header>
+
+<div class="about">
+  <div>
+    <p>Делаю playable ads под ключ: механика и игровая логика, анимация и эффекты, оптимизация моделей и ассетов под лимит в 5&nbsp;МБ, настройка визуала и сборка под рекламные сети.</p>
+    <p>В последних проектах работаю через собственный AI-пайплайн на Claude Code. Код и сборку он берёт на себя, а я сосредоточен на концепции плейбла, визуале и приёмке результата.</p>
+  </div>
+  <ul class="chips">
+    <li>Cocos Creator 3.x</li><li>TypeScript</li><li>Игровая логика</li><li>3D-анимация</li>
+    <li>VFX и шейдеры</li><li>Оптимизация под 5&nbsp;МБ</li><li>MRAID / AppLovin</li><li>Claude Code</li>
+  </ul>
+</div>
+
+<section>
+  <div class="sec-head">
+    <h2>Ручная разработка</h2>
+    <p>Код, логика и визуал — сам</p>
+  </div>
+  <div class="grid">
+    <article class="card" data-slug="tank-stars-battle">
+      <div><h3>Бой и магазин танков</h3><div class="game">Tank Stars</div></div>
+      <p>Сложная логика боя и покупок: прицеливание, топливо, выстрелы и урон, магазин танков и экономика монет.</p>
+      <div class="tags"><span>Логика</span><span>UI</span></div>
+    </article>
+    <article class="card" data-slug="kfc-gold-miners">
+      <div><h3>Ресторан с брендингом KFC</h3><div class="game">Gold Miners</div></div>
+      <p>Собрал один плейбл из наработок трёх проектов. Сложная анимация моделей: персонажи носят стопки, обслуживают столы, ресторан достраивается по ходу игры.</p>
+      <div class="tags"><span>3D-анимация</span><span>Интеграция</span></div>
+    </article>
+    <article class="card" data-slug="fashion-queen">
+      <div><h3>Показ мод</h3><div class="game">Fashion Queen</div></div>
+      <p>Исходные ассеты были очень тяжёлыми. Большая работа по оптимизации, чтобы плейбл уложился в лимит и шёл плавно.</p>
+      <div class="tags"><span>Оптимизация</span><span>3D</span></div>
+    </article>
+    <article class="card" data-slug="tank-stars-merge">
+      <div><h3>Мерж деталей танка</h3><div class="game">Tank Stars</div></div>
+      <p>Простая механика мержа, весь упор на эффекты: сборка апгрейда, вспышки, смена облика танка.</p>
+      <div class="tags"><span>VFX</span></div>
+    </article>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>AI-пайплайн</h2>
+    <p>Код и сборка — Claude Code, концепция, визуал и приёмка — я</p>
+  </div>
+  <div class="grid">
+    <article class="card" data-slug="chase" data-badge="Концепт">
+      <div><h3>Погоня</h3><div class="game">Собственный концепт</div></div>
+      <p>Моё видение того, каким должен быть плейбл: сюжетная подача, погоня с перестрелкой, взрывы и комикс-эффекты. В прод не пошёл.</p>
+      <div class="tags"><span>Концепт</span><span>VFX</span></div>
+    </article>
+    <article class="card" data-slug="tunnel-gunner">
+      <div><h3>Tunnel Gunner</h3><div class="game">Roadside Empire</div></div>
+      <p>Собран на базе наработок коллег. Задача — показать, что через AI-пайплайн можно быстро выйти на уровень топовых креативов жанра.</p>
+      <div class="tags"><span>Продакшн</span><span>Скорость</span></div>
+    </article>
+    <article class="card" data-slug="car-out-crowd">
+      <div><h3>Парковка с толпой</h3><div class="game">Car Out: Parking Puzzle</div></div>
+      <p>Главная фишка — шейдер толпы вокруг парковки, сделанный через AI-пайплайн.</p>
+      <div class="tags"><span>Шейдер</span></div>
+    </article>
+    <article class="card" data-slug="hexa-sort-dual" data-badge="Концепт">
+      <div><h3>Двойной экран</h3><div class="game">Hexa Sort</div></div>
+      <p>Одна из пяти моих итераций на этой механике. Новая концепция с двумя экранами; в прод не пошла.</p>
+      <div class="tags"><span>Концепт</span><span>Итерации</span></div>
+    </article>
+  </div>
+</section>
+
+<footer>
+  Рабочие плейблы — по запросу в Telegram: <a href="https://t.me/agazipov" target="_blank" rel="noopener">@agazipov</a>
+</footer>
+
+</div>
+
+<dialog id="player" aria-label="Полное видео">
+  <div class="modal">
+    <video id="fullVideo" controls playsinline muted></video>
+    <div class="bar"><span id="fullTitle"></span><button id="close" type="button">Закрыть</button></div>
+  </div>
+</dialog>
+
+<script>
+  // карточка: петля автоплеем, пока видна; клик — полное прохождение
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      const v = e.target;
+      if (e.isIntersecting) { v.play().catch(() => {}); } else { v.pause(); }
+    }
+  }, { threshold: 0.35 });
+
+  const dlg = document.getElementById('player');
+  const full = document.getElementById('fullVideo');
+
+  for (const card of document.querySelectorAll('.card')) {
+    const slug = card.dataset.slug;
+    const title = card.querySelector('h3').textContent;
+    const btn = document.createElement('button');
+    btn.className = 'phone';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Полное прохождение: ' + title);
+    btn.innerHTML =
+      `<video src="videos/${slug}-loop.mp4" poster="videos/${slug}.jpg" muted loop playsinline preload="none"></video>` +
+      (card.dataset.badge ? `<span class="badge">${card.dataset.badge}</span>` : '') +
+      `<span class="full">▶ Полное прохождение</span>`;
+    card.prepend(btn);
+    io.observe(btn.querySelector('video'));
+    btn.addEventListener('click', () => {
+      full.src = `videos/${slug}.mp4`;
+      document.getElementById('fullTitle').textContent = title;
+      dlg.showModal();
+      full.play().catch(() => {});
+    });
+  }
+
+  function closePlayer() { dlg.close(); }
+  document.getElementById('close').addEventListener('click', closePlayer);
+  dlg.addEventListener('click', e => { if (e.target === dlg) closePlayer(); });
+  dlg.addEventListener('close', () => { full.pause(); full.removeAttribute('src'); full.load(); });
+</script>
+</body>
+</html>
